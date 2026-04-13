@@ -1,28 +1,36 @@
-"use client"
+"use client";
 
-import { useState } from "react"
-import { Search } from "lucide-react"
-import { Input } from "@/components/ui/input"
-import { Button } from "@/components/ui/button"
-import { JobCard } from "@/components/job-card"
-import { jobs, Job } from "@/lib/jobs"
+import { useState } from "react";
+import { Search } from "lucide-react";
+import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
+import { JobCard } from "@/components/job-card";
+import { useRouter } from "next/navigation";
+import { Job } from "@/lib/jobs";
 
-const statusFilters = ["all", "active", "pending", "completed", "on-hold"] as const
+const statusFilters = [
+  "all",
+  "active",
+  "pending",
+  "completed",
+  "on-hold",
+] as const;
 
-export function JobList() {
-  const [searchQuery, setSearchQuery] = useState("")
-  const [activeFilter, setActiveFilter] = useState<typeof statusFilters[number]>("all")
+type JobListProps = { jobs: Job[] };
 
-  const filteredJobs = jobs.filter((job) => {
-    const matchesSearch = 
-      job.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      job.client.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      job.address.toLowerCase().includes(searchQuery.toLowerCase())
-    
-    const matchesFilter = activeFilter === "all" || job.status === activeFilter
+export function JobList({ jobs }: JobListProps) {
+  const [searchQuery, setSearchQuery] = useState("");
+  const [activeFilter, setActiveFilter] =
+    useState<(typeof statusFilters)[number]>("all");
+  const router = useRouter();
 
-    return matchesSearch && matchesFilter
-  })
+  const updateFilters = (nextSearch: string, nextFilter: string) => {
+    const params = new URLSearchParams();
+    if (nextSearch) params.set("q", nextSearch);
+    if (nextFilter) params.set("status", nextFilter);
+
+    router.push(`?${params.toString()}`);
+  };
 
   return (
     <div className="flex gap-6">
@@ -44,7 +52,11 @@ export function JobList() {
                 <Input
                   placeholder="Search jobs..."
                   value={searchQuery}
-                  onChange={(e) => setSearchQuery(e.target.value)}
+                  onChange={(e) => {
+                    const value = e.target.value;
+                    setSearchQuery(value);
+                    updateFilters(value, activeFilter);
+                  }}
                   className="pl-9  border border-white"
                 />
               </div>
@@ -60,7 +72,10 @@ export function JobList() {
                     key={filter}
                     variant={activeFilter === filter ? "secondary" : "ghost"}
                     size="sm"
-                    onClick={() => setActiveFilter(filter)}
+                    onClick={() => {
+                      setActiveFilter(filter);
+                      updateFilters(searchQuery, filter);
+                    }}
                     className="justify-start capitalize"
                   >
                     {filter.replace("-", " ")}
@@ -74,8 +89,8 @@ export function JobList() {
 
       {/* Job List */}
       <div className="flex-1 space-y-3 flex flex-col gap-3">
-        {filteredJobs.length > 0 ? (
-          filteredJobs.map((job) => <JobCard key={job.id} job={job} />)
+        {jobs.length > 0 ? (
+          jobs.map((job) => <JobCard key={job.id} job={job} />)
         ) : (
           <div className="flex flex-col items-center justify-center rounded-lg border border-dashed border-border py-12">
             <p className="text-sm text-muted-foreground">No jobs found</p>

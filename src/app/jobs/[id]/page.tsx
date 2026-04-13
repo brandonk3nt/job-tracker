@@ -30,7 +30,7 @@ interface JobDetailPageProps {
 
 export default async function JobDetailPage({ params }: JobDetailPageProps) {
   const { id } = await params;
-  const job = getJobById(id);
+  const job = await getJobById(id);
 
   if (!job) {
     notFound();

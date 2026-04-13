@@ -13,6 +13,11 @@ export interface Job {
   crew: string[]
 }
 
+type getJobsPayload = {
+  searchQuery: string;
+  activeFilter: string;
+};
+
 export const jobs: Job[] = [
   {
     id: "job-001",
@@ -100,8 +105,23 @@ export const jobs: Job[] = [
   }
 ]
 
-export function getJobById(id: string): Job | undefined {
+export async function getJobById(id: string): Promise<Job | undefined> {
   return jobs.find(job => job.id === id)
+}
+
+export async function getJobs({ searchQuery, activeFilter }: getJobsPayload) {
+  const filteredJobs = jobs.filter((job) => {
+    const matchesSearch =
+      job.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      job.client.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      job.address.toLowerCase().includes(searchQuery.toLowerCase());
+
+    const matchesFilter = activeFilter === "all" || job.status === activeFilter;
+
+    return matchesSearch && matchesFilter;
+  });
+
+  return filteredJobs;
 }
 
 export function getStatusColor(status: Job["status"]): string {
