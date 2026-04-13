@@ -11,8 +11,10 @@ interface JobDetailActionsProps {
 export function JobDetailActions({ job }: JobDetailActionsProps) {
   return (
     <div className="flex gap-2">
-      <Button variant="outline" size="sm">Edit Job</Button>
+      <Button className="hover:text-white" variant="outline" size="sm">
+        Edit Job
+      </Button>
       <JobModal job={job} mode="edit" />
     </div>
-  )
+  );
 }

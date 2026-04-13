@@ -1,26 +1,39 @@
-import { notFound } from "next/navigation"
-import Link from "next/link"
-import { ArrowLeft, MapPin, Calendar, DollarSign, User, Users, FileText } from "lucide-react"
-import { Topbar } from "@/components/topbar"
-import { Badge } from "@/components/ui/badge"
-import { Button } from "@/components/ui/button"
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import { Progress } from "@/components/ui/progress"
-import { Separator } from "@/components/ui/separator"
-import { JobDetailActions } from "@/components/job-detail-actions"
-import { getJobById, getStatusColor } from "@/lib/jobs"
-import { cn } from "@/lib/utils"
+import { notFound } from "next/navigation";
+import Link from "next/link";
+import {
+  ArrowLeft,
+  MapPin,
+  Calendar,
+  DollarSign,
+  User,
+  Users,
+  FileText,
+  Check,
+  Clock,
+  Mail,
+  Star,
+  Gift,
+} from "lucide-react";
+import { Topbar } from "@/components/topbar";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Progress } from "@/components/ui/progress";
+import { Separator } from "@/components/ui/separator";
+import { JobDetailActions } from "@/components/job-detail-actions";
+import { getJobById, getStatusColor } from "@/lib/jobs";
+import { cn } from "@/lib/utils";
 
 interface JobDetailPageProps {
-  params: Promise<{ id: string }>
+  params: Promise<{ id: string }>;
 }
 
 export default async function JobDetailPage({ params }: JobDetailPageProps) {
-  const { id } = await params
-  const job = getJobById(id)
+  const { id } = await params;
+  const job = getJobById(id);
 
   if (!job) {
-    notFound()
+    notFound();
   }
 
   return (
@@ -195,6 +208,129 @@ export default async function JobDetailPage({ params }: JobDetailPageProps) {
               </CardContent>
             </Card>
           </div>
+
+          {/* Post Completion Actions Card */}
+          <Card className="py-6">
+            <CardHeader>
+              <CardTitle className="flex items-center gap-2 text-base">
+                <Star className="h-4 w-4 text-primary" />
+                Post-Completion Actions
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="grid gap-6 md:grid-cols-2">
+                {/* Review Requests Log */}
+                <div>
+                  <div className="mb-4 flex items-center justify-between">
+                    <h4 className="flex items-center gap-2 text-sm font-medium text-foreground">
+                      <Mail className="h-4 w-4 text-muted-foreground" />
+                      Review Requests
+                    </h4>
+                    <Button
+                      size="sm"
+                      variant="outline"
+                      className="h-7 text-xs hover:text-white"
+                    >
+                      Send Request
+                    </Button>
+                  </div>
+                  <div className="space-y-3">
+                    <div className="flex items-start gap-3 rounded-lg border border-border bg-secondary/30 p-3">
+                      <div className="mt-0.5 flex h-5 w-5 items-center justify-center rounded-full bg-primary/20">
+                        <Check className="h-3 w-3 text-primary" />
+                      </div>
+                      <div className="flex-1">
+                        <div className="flex items-center justify-between">
+                          <p className="text-sm font-medium text-foreground">
+                            Google Review Request
+                          </p>
+                          <span className="text-xs text-muted-foreground">
+                            Mar 28, 2026
+                          </span>
+                        </div>
+                        <p className="text-xs text-muted-foreground">
+                          Sent via email - Review submitted
+                        </p>
+                      </div>
+                    </div>
+                    <div className="flex items-start gap-3 rounded-lg border border-border bg-secondary/30 p-3">
+                      <div className="mt-0.5 flex h-5 w-5 items-center justify-center rounded-full bg-muted">
+                        <Clock className="h-3 w-3 text-muted-foreground" />
+                      </div>
+                      <div className="flex-1">
+                        <div className="flex items-center justify-between">
+                          <p className="text-sm font-medium text-foreground">
+                            Follow-up Request
+                          </p>
+                          <span className="text-xs text-muted-foreground">
+                            Apr 2, 2026
+                          </span>
+                        </div>
+                        <p className="text-xs text-muted-foreground">
+                          Sent via SMS - Pending response
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Promotional Offerings */}
+                <div>
+                  <div className="mb-4 flex items-center justify-between">
+                    <h4 className="flex items-center gap-2 text-sm font-medium text-foreground">
+                      <Gift className="h-4 w-4 text-muted-foreground" />
+                      Promotional Offerings
+                    </h4>
+                    <Button
+                      size="sm"
+                      variant="outline"
+                      className="h-7 text-xs hover:text-white"
+                    >
+                      Send Offer
+                    </Button>
+                  </div>
+                  <div className="space-y-3">
+                    <div className="flex items-start gap-3 rounded-lg border border-border bg-secondary/30 p-3">
+                      <div className="mt-0.5 flex h-5 w-5 items-center justify-center rounded-full bg-primary/20">
+                        <Check className="h-3 w-3 text-primary" />
+                      </div>
+                      <div className="flex-1">
+                        <div className="flex items-center justify-between">
+                          <p className="text-sm font-medium text-foreground">
+                            10% Referral Discount
+                          </p>
+                          <span className="text-xs text-muted-foreground">
+                            Mar 30, 2026
+                          </span>
+                        </div>
+                        <p className="text-xs text-muted-foreground">
+                          Code: REFER10 - Used by 1 referral
+                        </p>
+                      </div>
+                    </div>
+                    <div className="flex items-start gap-3 rounded-lg border border-border bg-secondary/30 p-3">
+                      <div className="mt-0.5 flex h-5 w-5 items-center justify-center rounded-full bg-muted">
+                        <Clock className="h-3 w-3 text-muted-foreground" />
+                      </div>
+                      <div className="flex-1">
+                        <div className="flex items-center justify-between">
+                          <p className="text-sm font-medium text-foreground">
+                            Seasonal Maintenance Offer
+                          </p>
+                          <span className="text-xs text-muted-foreground">
+                            Apr 5, 2026
+                          </span>
+                        </div>
+                        <p className="text-xs text-muted-foreground">
+                          15% off spring maintenance - Expires Apr 30
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
         </div>
       </main>
     </div>

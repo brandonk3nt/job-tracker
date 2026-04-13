@@ -6,8 +6,8 @@ const _geist = Geist({ subsets: ["latin"] });
 const _geistMono = Geist_Mono({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: 'Finch AI',
-  description: 'Manage and track your projects',
+  title: 'FinchStack',
+  description: 'Manage and nurture your customers',
   icons: {
     icon: [
       {
